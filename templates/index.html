@@ -1,0 +1,28 @@
+<!-- index.html -->
+{% extends "base.html" %}
+
+{% block title %}CodeTube - Inicio{% endblock %}
+
+{% block content %}
+<main class="videos">
+  {% if videos %}
+    {% for video in videos %}
+      <a href="{{ url_for('video_page', video_id=video._id) }}" class="video-card-link">
+        <div class="video-card">
+          <video class="thumbnail" controls>
+            <source src="/static/uploads/{{ video.filename }}" type="video/mp4">
+          </video>
+          <h3 class="title">{{ video.title }}</h3>
+          <p class="meta">{{ video.views }} visualizaciones · {{ video.date }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <p>No hay videos disponibles</p>
+  {% endif %}
+</main>
+{% endblock %}
+
+{% block extra_js %} 
+
+{% endblock %}

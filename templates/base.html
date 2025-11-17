@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}CodeTube{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <!-- Encabezado -->
+    <header class="header">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo CodeTube" class="logo-img" />
+        <span class="logo-text">CodeTube</span>
+      </div>
+
+      {% block header_content %}
+      <form method="POST" action="{{ url_for('search') }}">
+        <input type="text" class="search" name="query" placeholder="Buscar" />
+        <button type="submit" class="search-btn">Buscar</button>
+      </form>
+      <div class="auth-links">
+        {% if user %}
+          <span>Bienvenido, {{ user.username }}</span>
+          <a class="manage-btn" href="{{ url_for('library') }}">Mis videos</a>
+          <a href="{{ url_for('upload_page') }}">Subir video</a>
+          {% if user.role == 'admin' %}
+            <a class="manage-btn admin" href="/admin">Panel admin</a>
+          {% endif %}
+          <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+        {% else %}
+          <a href="{{ url_for('login_page') }}">Iniciar sesión</a>
+          <a href="{{ url_for('register_page') }}">Registrarse</a>
+        {% endif %}
+      </div>
+      {% endblock %}
+    </header>
+
+    <!-- Layout principal -->
+    <div class="container">
+      <nav id="sidebar" class="sidebar" aria-label="Navegación principal">
+        {% block sidebar %}
+        <div class="sidebar-inner">
+          <div class="sidebar-top">
+            <button id="sidebarToggle" class="sidebar-toggle" aria-expanded="false" aria-controls="sidebarMenu">☰</button>
+            <span class="sidebar-title">Navegación</span>
+          </div>
+
+          <ul id="sidebarMenu" class="sidebar-menu">
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a href="{{ url_for('trending') }}">Tendencias</a></li>
+
+            <li class="has-sub">
+              <button class="submenu-toggle" aria-expanded="false">Más opciones ▾</button>
+              <ul class="submenu">
+                {% if user %}
+                  <li><a href="{{ url_for('subscriptions') }}">Suscripciones</a></li>
+                  <li><a href="{{ url_for('library') }}">Biblioteca</a></li>
+                  <li><a href="{{ url_for('upload_page') }}">Subir video</a></li>
+                {% else %}
+                  <li><a href="{{ url_for('login_page') }}">Iniciar sesión</a></li>
+                  <li><a href="{{ url_for('register_page') }}">Registrarse</a></li>
+                {% endif %}
+              </ul>
+            </li>
+          </ul>
+        </div>
+        {% endblock %}
+      </nav>
+
+      <main class="main-content" id="mainContent">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+    <script src="{{ url_for('static', filename='sidebar.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}CodeTube - Iniciar sesión{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+  <h2>Iniciar sesión</h2>
+
+  <div class="error-message" id="errorMessage"></div>
+  <div class="success-message" id="successMessage"></div>
+
+  <form id="loginForm" onsubmit="return false;">
+    <input type="text" id="username" placeholder="Usuario" required />
+    <input type="password" id="password" placeholder="Contraseña" required />
+    <button type="submit">Entrar</button>
+  </form>
+  <p>¿No tienes cuenta? <a href="{{ url_for('register_page') }}">Regístrate</a></p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='login.js') }}"></script>
+{% endblock %}
